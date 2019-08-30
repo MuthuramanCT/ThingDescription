@@ -1,0 +1,160 @@
+{
+	"@context": [ "https://www.w3.org/2019/wot/td/v1",
+		{ "cov": "http://www.example.org/coap-binding#" }],
+	"id": "urn:dev:ops:88888-CNCMachine-1234",
+	"title": "MyCNCMachine",
+	"securityDefinitions": {
+		"basic_sc": {"scheme": "basic", "in":"header"}
+	},
+	"security": ["basic_sc"],
+	"properties": {
+		"status": {
+			"type": "string",
+			"enum": ["idle/ProductionComplte", "ProductionInProgress", "Error"],
+			"readOnly" : true,
+			"forms": [{
+				"op": "readproperty",
+				"href": "https://cncmachine.example.com/status",
+				"htv:methodName":"GET",
+				"contentType": "application/json"
+			}]
+		},
+		"CheckInput": {
+			"description" : "Returns percentage of material available",
+			"type": "number",
+			"minimum": 0.0,
+			"maximum": 100.0,
+			"readOnly" : true,
+			"forms": [{
+				"op": "readproperty",
+				"href": "https://cncmachine.example.com/CheckInput",
+				"htv:methodName":"GET",
+				"contentType": "application/json"
+			}]
+		},
+		"LogFileStorageCapacity": {
+			"description" : "Returns percentage of memory available",
+			"type": "number",
+			"minimum": 0.0,
+			"maximum": 100.0,
+			"readOnly" : true,
+			"forms": [{
+				"op": "readproperty",
+				"href": "https://cncmachine.example.com/LogFileStorageCapacity",
+				"htv:methodName":"GET",
+				"contentType": "application/json"
+			}]
+		},
+		"VoltageCheck": {
+			"description" : "Returns about the voltage input",
+			"type": "string",
+			"enum": ["High", "Normal", "Low"],
+			"readOnly" : true,
+			"forms": [{
+				"op": "readproperty",
+				"href": "https://cncmachine.example.com/VoltageCheck",
+				"htv:methodName":"GET",
+				"contentType": "application/json"
+			}]
+		},
+		"TemperatureCheck": {
+			"description" : "Returns the temperature of the machine in Celcius",
+			"type": "number",
+			"minimum": -2000.0,
+			"maximum": 2000.0,
+			"readOnly" : true,
+			"forms": [{
+				"op": "readproperty",
+				"href": "https://cncmachine.example.com/TemperatureCheck",
+				"htv:methodName":"GET",
+				"contentType": "application/json"
+			}]
+		}
+	},
+	"actions": {
+		"toggle": {
+			"description": "Turn off or on the system",
+			"type": "string",
+			"enum": ["On","Off"],
+			"writeOnly" : true,
+			"forms": [{
+				"op": "invokeaction",
+				"href": "https://cncmachine.example.com/toggle",
+				"htv:methodName":"POST",
+				"contentType": "application/json"
+			}]
+		},
+		"StartProduction": {
+			"description": "Starts the production by specifying model filename and production Quantity",
+			"type": "object",
+				"properties": {
+					"filename": {
+						"type": "string",
+						"contains": "*.cad"
+					},
+					"quantity":{
+						"type": "integer",
+						"minimum": 0,
+						"maximum": 4000
+					}
+				},
+			"writeOnly" : true,
+			"forms": [{
+				"op": "invokeaction",
+				"href": "https://cncmachine.example.com/StartProduction",
+				"htv:methodName":"POST",
+				"contentType": "application/json"
+			}]			
+		},
+		"StopProduction": {
+			"description": "Stops the production",
+			"forms": [{
+				"href": "coap://cncmachine.example.com/StartProduction",
+				"cov:methodName":"POST"
+			}]
+		},
+		"OpenValve": {
+			"description": "Opens valve to raw material input",
+			"forms": [{
+				"href": "https://cncmachine.example.com/OpenValve",
+				"htv:methodName":"POST"
+			}]
+		},
+		"CloseValve": {
+			"description": "Closes the valve after Material input",
+			"forms": [{
+				"href": "https://cncmachine.example.com/CloseValve",
+				"htv:methodName":"POST"
+			}]
+		}
+	},
+	"events": {
+		"overHeating":{
+			"description": "Intimates on over heating",
+			"type": "string",
+            "forms": [{
+                "href": "https://cncmachine.example.com/overHeating",
+                "htv:methodName":"GET",
+				"contentType": "application/json"
+            }]
+        },
+		"RawMaterialOverFilling": {
+			"description": "Intimates if raw material about to be overfilled",
+			"type": "string",
+            "forms": [{
+                "href": "https://cncmachine.example.com/RawMaterialOverFilling",
+                "htv:methodName":"GET",
+				"contentType": "application/json"
+            }]
+        },
+		"RawMaterialAvailability": {
+			"description": "Intimates if raw material about to be empty",
+			"type": "string",
+            "forms": [{
+                "href": "https://cncmachine.example.com/RawMaterialAvailability",
+                "htv:methodName":"GET",
+				"contentType": "application/json"
+            }]
+        }
+    }
+}
