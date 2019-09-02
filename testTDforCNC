@@ -74,8 +74,10 @@
 	"actions": {
 		"toggle": {
 			"description": "Turn off or on the system",
-			"type": "string",
-			"enum": ["On","Off"],
+			"input": {
+				"type": "string",
+				"enum": ["On","Off"]
+			},
 			"writeOnly" : true,
 			"forms": [{
 				"op": "invokeaction",
@@ -86,7 +88,8 @@
 		},
 		"StartProduction": {
 			"description": "Starts the production by specifying model filename and production Quantity",
-			"type": "object",
+			"input": {
+				"type": "object",
 				"properties": {
 					"filename": {
 						"type": "string",
@@ -97,7 +100,8 @@
 						"minimum": 0,
 						"maximum": 4000
 					}
-				},
+				}
+			},
 			"writeOnly" : true,
 			"forms": [{
 				"op": "invokeaction",
