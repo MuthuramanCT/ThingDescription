@@ -93,7 +93,7 @@ thing.addAction(
         });                                                                     
     });
 thing.addAction(                                                                
-    NAME_ACTION_,                                                      
+    NAME_ACTION_TOGGLE,
     {
 		description: "Turn off or on the system",
 		uriVariables: {
